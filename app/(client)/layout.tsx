@@ -14,13 +14,11 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en">
-			<body>
-				<ProtectedRoute>
-					<Navbar />
-					<main className="max-w-5xl mx-auto px-4 py-20">{children}</main>
-				</ProtectedRoute>
-			</body>
-		</html>
+		<div className="bg-black text-white">
+			<ProtectedRoute>
+				<Navbar />
+				<main className="max-w-5xl mx-auto px-4 py-20">{children}</main>
+			</ProtectedRoute>
+		</div>
 	);
 }

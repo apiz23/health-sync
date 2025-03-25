@@ -79,7 +79,7 @@ export default function Page() {
 				<h2 className="text-3xl font-semibold mb-4">Quick Actions</h2>
 				<div className="grid grid-cols-1 md:grid-cols-3 md:gap-4">
 					<Link href="/medications" className="py-2 rounded text-center">
-						<Button variant="default" className="w-full">
+						<Button variant="outline" className="text-black w-full bg-white">
 							Add Medication Reminder
 						</Button>
 					</Link>
@@ -97,10 +97,7 @@ export default function Page() {
 					<div className="space-y-3">
 						{diseases.major.length > 0 ? (
 							diseases.major.map((disease) => (
-								<div
-									key={disease.id}
-									className="bg-white p-4 rounded-lg"
-								>
+								<div key={disease.id} className="bg-white p-4 rounded-lg">
 									<div className="flex justify-between items-start">
 										<div>
 											<h3 className="font-medium text-red-900">{disease.name}</h3>
@@ -127,10 +124,7 @@ export default function Page() {
 					<div className="space-y-3">
 						{diseases.minor.length > 0 ? (
 							diseases.minor.map((disease) => (
-								<div
-									key={disease.id}
-									className="bg-white p-4 rounded-lg"
-								>
+								<div key={disease.id} className="bg-white p-4 rounded-lg">
 									<div className="flex justify-between items-start">
 										<div>
 											<h3 className="font-medium text-yellow-900">{disease.name}</h3>

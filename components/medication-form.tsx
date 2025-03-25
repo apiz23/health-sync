@@ -103,7 +103,7 @@ export function MedicationForm() {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button variant="outline" className="text-black w-full bg-white">
+				<Button variant="outline" className="text-black w-fit bg-white">
 					Add New Medication
 				</Button>
 			</DialogTrigger>
