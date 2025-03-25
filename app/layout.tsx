@@ -4,7 +4,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import { AuthProvider } from "@/providers/auth-provider";
 
-const poppins = Poppins({ subsets: ["latin"], weight: ["500"] });
+const poppins = Poppins({ subsets: ["latin-ext"], weight: ["500"] });
 
 export const metadata: Metadata = {
 	title: "HealthCare AI",
@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={`${poppins.className}`}>
+			<body className={`${poppins.className} bg-black text-white`}>
 				<Toaster />
 				<AuthProvider>{children}</AuthProvider>
 			</body>

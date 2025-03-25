@@ -38,7 +38,7 @@ export default function ChatDialog() {
 		setInput("");
 
 		try {
-			const response = await fetch("http://127.0.0.1:8000/chat", {
+			const response = await fetch(`${process.env.NEXT_PUBLIC_PYTHON_API}/chat`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ session_id: userId, message: input }),
@@ -62,7 +62,7 @@ export default function ChatDialog() {
 	return (
 		<Dialog>
 			<DialogTrigger className="py-2 text-center">
-				<Button variant="default" className="text-white">
+				<Button variant="outline" className="text-black w-full bg-white">
 					Start Chat Session
 				</Button>
 			</DialogTrigger>

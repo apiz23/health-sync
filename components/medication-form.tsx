@@ -1,15 +1,15 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-	Sheet,
-	SheetContent,
-	SheetDescription,
-	SheetFooter,
-	SheetHeader,
-	SheetTitle,
-	SheetTrigger,
-} from "@/components/ui/sheet";
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -19,15 +19,13 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { useAuth } from "@/providers/auth-provider";
 import { toast } from "sonner";
 import { Calendar } from "@/components/ui/calendar";
 import { MedicationFormData } from "@/interface/interface";
 
 export function MedicationForm() {
-
-    const userId = sessionStorage.getItem("userId");
-
+	const userId = sessionStorage.getItem("userId");
+	const [diseases, setDiseases] = useState<{ id: string; name: string }[]>([]);
 	const [formData, setFormData] = useState<MedicationFormData>({
 		name: "",
 		dosage: "",
@@ -36,7 +34,25 @@ export function MedicationForm() {
 		startDate: new Date(),
 		endDate: null,
 		notes: "",
+		diseaseId: "",
 	});
+
+	useEffect(() => {
+		const fetchDiseases = async () => {
+			try {
+				const response = await fetch(
+					`${process.env.NEXT_PUBLIC_NEST_API_URL}/diseases?userId=${userId}`
+				);
+				if (!response.ok) throw new Error("Failed to fetch diseases");
+				const data = await response.json();
+				setDiseases(data);
+			} catch (error) {
+				console.error(error);
+			}
+		};
+
+		fetchDiseases();
+	}, []);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -76,6 +92,7 @@ export function MedicationForm() {
 				startDate: new Date(),
 				endDate: null,
 				notes: "",
+				diseaseId: "",
 			});
 		} catch (error) {
 			console.error("Frontend error:", error);
@@ -84,18 +101,41 @@ export function MedicationForm() {
 	};
 
 	return (
-		<Sheet>
-			<SheetTrigger asChild>
-				<Button className="w-fit">Add New Medication</Button>
-			</SheetTrigger>
-			<SheetContent className="w-full lg:max-w-[40vw] overflow-auto p-6">
-				<SheetHeader>
-					<SheetTitle>Add Medication Reminder</SheetTitle>
-					<SheetDescription>
+		<Dialog>
+			<DialogTrigger asChild>
+				<Button variant="outline" className="text-black w-fit bg-white">
+					Add New Medication
+				</Button>
+			</DialogTrigger>
+			<DialogContent className="overflow-auto p-6 h-[60vh] min-w-fit">
+				<DialogHeader>
+					<DialogTitle className="text-black">Add Medication Reminder</DialogTitle>
+					<DialogDescription>
 						Set up reminders for your medication schedule
-					</SheetDescription>
-				</SheetHeader>
-				<form onSubmit={handleSubmit} className="space-y-4">
+					</DialogDescription>
+				</DialogHeader>
+				<form onSubmit={handleSubmit} className="space-y-4 text-black">
+					<div className="space-y-2">
+						<Label htmlFor="disease">Disease</Label>
+						<Select
+							value={formData.diseaseId}
+							onValueChange={(value) =>
+								setFormData((prev) => ({ ...prev, diseaseId: value }))
+							}
+							required
+						>
+							<SelectTrigger className="w-full">
+								<SelectValue placeholder="Select Disease" />
+							</SelectTrigger>
+							<SelectContent>
+								{diseases.map((disease) => (
+									<SelectItem key={disease.id} value={disease.id}>
+										{disease.name}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					</div>
 					{/* Medication Name */}
 					<div className="space-y-2">
 						<Label htmlFor="name">Medication Name</Label>
@@ -108,6 +148,7 @@ export function MedicationForm() {
 									name: e.target.value,
 								}))
 							}
+							placeholder="Fever"
 							required
 						/>
 					</div>
@@ -207,7 +248,7 @@ export function MedicationForm() {
 					</div>
 
 					{/* Start and End Dates */}
-					<div className="grid grid-cols-1 gap-4">
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 						<div className="space-y-3">
 							<Label>Start Date</Label>
 							<Calendar
@@ -255,15 +296,15 @@ export function MedicationForm() {
 					</div>
 
 					{/* Submit Button */}
-					<SheetFooter>
+					<DialogFooter>
 						<div className="flex justify-end">
 							<Button type="submit" className="w-fit">
 								Save Medication
 							</Button>
 						</div>
-					</SheetFooter>
+					</DialogFooter>
 				</form>
-			</SheetContent>
-		</Sheet>
+			</DialogContent>
+		</Dialog>
 	);
 }

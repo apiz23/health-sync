@@ -1,178 +1,202 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useAuth } from "@/providers/auth-provider";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { MedicationForm } from "./medication-form";
 import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
 } from "./ui/dialog";
-
-interface MedicationLog {
-    id: string;
-    scheduled_time: string;
-    taken_time: string | null;
-    status: "pending" | "taken" | "missed";
-}
-
-interface Medication {
-    id: string;
-    name: string;
-    dosage: string;
-    frequency: string;
-    time_of_day: string[];
-    start_date: string;
-    end_date: string | null;
-    notes: string | null;
-    created_at: string;
-    user_id: string;
-}
+import { Medication } from "@/interface/interface";
+import Loader from "./loader";
 
 export function MedicationList() {
-    const { hsUser } = useAuth();
-    const [medications, setMedications] = useState<Medication[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+	const [medications, setMedications] = useState<Medication[]>([]);
+	const [diseases, setDiseases] = useState<{ id: string; name: string }[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const userId = sessionStorage.getItem("userId");
 
-    useEffect(() => {
-        async function fetchMedications() {
-            const userId = hsUser?.id || sessionStorage.getItem("userId");
+	useEffect(() => {
+		if (!userId) {
+			setIsLoading(false);
+			return;
+		}
 
-            if (!userId) {
-                console.warn("User ID not found");
-                setIsLoading(false);
-                return;
-            }
+		const fetchMedications = async () => {
+			try {
+				const response = await fetch(
+					`${process.env.NEXT_PUBLIC_NEST_API_URL}/medications?userId=${userId}`
+				);
+				const responseData = await response.json();
+				setMedications(Array.isArray(responseData.data) ? responseData.data : []);
+			} catch (error) {
+				console.error("Error fetching medications:", error);
+				toast.error("Failed to load medications");
+				setMedications([]);
+			} finally {
+				setIsLoading(false);
+			}
+		};
 
-            try {
-                console.log("Fetching Medications for User:", userId);
-                const response = await fetch(
-                    `${process.env.NEXT_PUBLIC_NEST_API_URL}/medications?userId=${userId}`
-                );
-                console.log(response);
-                const responseData = await response.json();
+		const fetchDiseases = async () => {
+			try {
+				const response = await fetch(
+					`${process.env.NEXT_PUBLIC_NEST_API_URL}/diseases?userId=${userId}`
+				);
+				if (!response.ok) throw new Error("Failed to fetch diseases.");
+				const data = await response.json();
+				setDiseases(data);
+			} catch (error) {
+				console.error("Error fetching diseases:", error);
+				toast.error("Failed to fetch diseases.");
+			}
+		};
 
-                if (Array.isArray(responseData.data)) {
-                    setMedications(responseData.data);
-                } else {
-                    setMedications([]);
-                }
-            } catch (error) {
-                console.error("Error fetching medications:", error);
-                toast.error("Failed to load medications");
-                setMedications([]);
-            } finally {
-                setIsLoading(false);
-            }
-        }
+		fetchMedications();
+		fetchDiseases();
+	}, [userId]);
 
-        fetchMedications();
-    }, [hsUser?.id]);
+	// Helper function to get disease name
+	const getDiseaseName = (diseaseId: string) => {
+		const disease = diseases.find((d) => d.id === diseaseId);
+		return disease ? disease.name : "Unknown Disease";
+	};
 
-    if (isLoading) {
-        return (
-            <div className="flex items-center justify-center p-4">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
-            </div>
-        );
-    }
+	// Loading state
+	if (isLoading) return <Loader />;
 
-    const userId = hsUser?.id || sessionStorage.getItem("userId");
-    if (!userId) {
-        return (
-            <div className="text-center p-4 text-gray-500">
-                Please log in to view medications
-            </div>
-        );
-    }
+	// No user logged in
+	if (!userId) {
+		return (
+			<div className="text-center p-4 text-gray-500">
+				Please log in to view medications
+			</div>
+		);
+	}
 
-    if (medications.length === 0) {
-        return (
-            <div className="text-center p-4 text-gray-500">
-                No medications found. Add your first medication to get started.
-            </div>
-        );
-    }
+	// No medications found
+	if (medications.length === 0) {
+		return (
+			<div className="text-center p-4 text-gray-500">
+				No medications found. Add your first medication to get started.
+			</div>
+		);
+	}
 
-    return (
-        <div className="space-y-4">
-            <div className="flex justify-between items-center">
-                <MedicationForm />
-            </div>
+	return (
+		<div className="h-fit space-y-4">
+			{/* Medication Form */}
+			<div className="flex justify-between items-center">
+				<MedicationForm />
+			</div>
 
-            {medications.map((medication) => (
-                <Card key={medication.id} className="p-4 space-y-3">
-                    <Dialog>
-                        <div className="flex justify-between">
-                            <div className="flex flex-col justify-start text-left">
-                                <p>Medication Name: {medication.name}</p>
-                                <p>Frequency: {medication.frequency}</p>
-                            </div>
-                            <DialogTrigger asChild>
-                                <div>
-                                    <Button>View More</Button>
-                                </div>
-                            </DialogTrigger>
-                        </div>
-                        <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle>Details</DialogTitle>
-                            </DialogHeader>
-                            <div className="flex justify-between items-start">
-                                <div>
-                                    <h3 className="font-medium">
-                                        {medication.name}
-                                    </h3>
-                                    <p className="text-sm text-gray-600">
-                                        Dosage: {medication.dosage}
-                                    </p>
-                                    <p className="text-sm text-gray-600">
-                                        Frequency: {medication.frequency}
-                                    </p>
-                                    <p className="text-sm text-gray-600">
-                                        Start Date:{" "}
-                                        {new Date(
-                                            medication.start_date
-                                        ).toLocaleDateString()}
-                                    </p>
-                                    {medication.end_date && (
-                                        <p className="text-sm text-gray-600">
-                                            End Date:{" "}
-                                            {new Date(
-                                                medication.end_date
-                                            ).toLocaleDateString()}
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
+			{/* Medication List */}
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+				{medications.map((medication) => (
+					<Card key={medication.id} className="space-y-3">
+						<Dialog>
+							<CardHeader className="flex justify-between">
+								<div className="text-left">
+									<p>Medication Name: {medication.name}</p>
+									<p>Frequency: {medication.frequency}</p>
+								</div>
+							</CardHeader>
+							<CardContent className="flex justify-end">
+								<DialogTrigger asChild>
+									<Button>View</Button>
+								</DialogTrigger>
+							</CardContent>
+							<DialogContent>
+								<DialogHeader>
+									<DialogTitle className="text-black">Details</DialogTitle>
+								</DialogHeader>
+								<div className="flow-root space-y-4">
+									<dl className="-my-3 divide-y divide-gray-200 text-sm">
+										{/* Medication Name */}
+										<div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+											<dt className="font-medium text-gray-900">Medication Name</dt>
+											<dd className="text-gray-700 sm:col-span-2 font-bold">
+												{medication.name}
+											</dd>
+										</div>
 
-                            <div className="space-y-2">
-                                <h4 className="font-medium">
-                                    Scheduled Times:
-                                </h4>
-                                {medication.time_of_day.map((time, index) => (
-                                    <div key={index} className="flex gap-2">
-                                        <p className="text-sm">{time}</p>
-                                    </div>
-                                ))}
-                            </div>
-                            <DialogFooter>
-                                <DialogClose>
-                                    <Button variant="outline">Cancel</Button>
-                                </DialogClose>
-                            </DialogFooter>
-                        </DialogContent>
-                    </Dialog>
-                </Card>
-            ))}
-        </div>
-    );
+										{/* Disease */}
+										<div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+											<dt className="font-medium text-gray-900">Disease</dt>
+											<dd className="text-gray-700 sm:col-span-2">
+												{getDiseaseName(medication.disease_id)}
+											</dd>
+										</div>
+
+										{/* Dosage */}
+										<div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+											<dt className="font-medium text-gray-900">Dosage</dt>
+											<dd className="text-gray-700 sm:col-span-2">{medication.dosage}</dd>
+										</div>
+
+										{/* Frequency */}
+										<div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+											<dt className="font-medium text-gray-900">Frequency</dt>
+											<dd className="text-gray-700 sm:col-span-2">
+												{medication.frequency}
+											</dd>
+										</div>
+
+										{/* Start Date */}
+										<div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+											<dt className="font-medium text-gray-900">Start Date</dt>
+											<dd className="text-gray-700 sm:col-span-2">
+												{new Date(medication.start_date).toLocaleDateString()}
+											</dd>
+										</div>
+
+										{/* End Date (Optional) */}
+										{medication.end_date && (
+											<div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+												<dt className="font-medium text-gray-900">End Date</dt>
+												<dd className="text-gray-700 sm:col-span-2">
+													{new Date(medication.end_date).toLocaleDateString()}
+												</dd>
+											</div>
+										)}
+
+										<div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+											<dt className="font-medium text-gray-900">Scheduled Times</dt>
+											<dd className="text-gray-700 sm:col-span-2">
+												{medication.time_of_day.length > 0 ? (
+													<ul className="list-disc list-inside space-y-1">
+														{medication.time_of_day.map((time, index) => (
+															<li key={index}>{time}</li>
+														))}
+													</ul>
+												) : (
+													"No scheduled times"
+												)}
+											</dd>
+										</div>
+									</dl>
+								</div>
+
+								{/* Close Button */}
+								<DialogFooter>
+									<DialogClose>
+										<Button variant="outline" className="text-black">
+											Cancel
+										</Button>
+									</DialogClose>
+								</DialogFooter>
+							</DialogContent>
+						</Dialog>
+					</Card>
+				))}
+			</div>
+		</div>
+	);
 }

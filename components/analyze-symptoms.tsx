@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
 	Dialog,
 	DialogContent,
@@ -14,12 +14,30 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Loader } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Input } from "@/components/ui/input";
+import { AiAnalysis } from "@/interface/interface";
 
 export default function SymptomAnalysisDialog() {
 	const [symptoms, setSymptoms] = useState("");
-	const [aiAnalysis, setAiAnalysis] = useState<any>(null);
+	const [aiAnalysis, setAiAnalysis] = useState<AiAnalysis | null>(null);
 	const [isAnalyzing, setIsAnalyzing] = useState(false);
 	const [showAnalysis, setShowAnalysis] = useState(false);
+	const [showAddOption, setShowAddOption] = useState(false);
+	const [formData, setFormData] = useState({
+		userId: "",
+		name: "",
+		category: "",
+		classification: "minor",
+		description: "",
+	});
+
+	useEffect(() => {
+		const storedUserId = sessionStorage.getItem("userId");
+		if (storedUserId) {
+			setFormData((prev) => ({ ...prev, userId: storedUserId }));
+		}
+	}, []);
 
 	const analyzeSymptoms = async () => {
 		if (!symptoms.trim()) return;
@@ -27,13 +45,16 @@ export default function SymptomAnalysisDialog() {
 		setIsAnalyzing(true);
 
 		try {
-			const response = await fetch("http://127.0.0.1:8000/analyze", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ symptoms }),
-			});
+			const response = await fetch(
+				`${process.env.NEXT_PUBLIC_PYTHON_API}/analyze`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ symptoms }),
+				}
+			);
 
 			if (!response.ok) {
 				throw new Error("Failed to analyze symptoms.");
@@ -41,7 +62,13 @@ export default function SymptomAnalysisDialog() {
 
 			const data = await response.json();
 			setAiAnalysis(data);
+			setFormData((prev) => ({
+				...prev,
+				name: data.possible_disease || "",
+				description: symptoms,
+			}));
 			setShowAnalysis(true);
+			setShowAddOption(true);
 		} catch (error) {
 			console.error("Error:", error);
 			alert("Something went wrong while analyzing. Please try again.");
@@ -50,16 +77,44 @@ export default function SymptomAnalysisDialog() {
 		}
 	};
 
+	const addDiseaseToDatabase = async () => {
+		try {
+			const response = await fetch(
+				`${process.env.NEXT_PUBLIC_NEST_API_URL}/add-disease`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(formData),
+				}
+			);
+
+			if (!response.ok) {
+				throw new Error("Failed to add disease.");
+			}
+
+			alert("Disease added successfully!");
+			setShowAddOption(false);
+			setShowAnalysis(false);
+			setSymptoms("");
+			setAiAnalysis(null);
+		} catch (error) {
+			console.error("Error:", error);
+			alert("Something went wrong while adding the disease.");
+		}
+	};
+
 	return (
 		<Dialog>
 			<DialogTrigger className="py-2 text-center">
-				<Button variant="default" className="text-white">
-					Add New Symptoms
+				<Button variant="outline" className="text-black w-full bg-white">
+					Diagnose Symptoms
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[500px]">
 				<DialogHeader>
-					<DialogTitle>Add New Symptoms</DialogTitle>
+					<DialogTitle>Diagnose Symptoms</DialogTitle>
 					<DialogDescription>
 						Describe your symptoms, and our AI will analyze them.
 					</DialogDescription>
@@ -95,6 +150,52 @@ export default function SymptomAnalysisDialog() {
 					)}
 				</div>
 
+				{showAddOption && (
+					<div className="mt-4 space-y-4">
+						<h3 className="text-lg font-semibold">
+							Do you want to add this disease?
+						</h3>
+						<div className="space-y-2">
+							<Label htmlFor="name">Disease Name</Label>
+							<Input
+								id="name"
+								value={formData.name}
+								onChange={(e) =>
+									setFormData((prev) => ({ ...prev, name: e.target.value }))
+								}
+							/>
+						</div>
+						<div className="space-y-2">
+							<Label htmlFor="category">Category</Label>
+							<Input
+								id="category"
+								value={formData.category}
+								onChange={(e) =>
+									setFormData((prev) => ({ ...prev, category: e.target.value }))
+								}
+							/>
+						</div>
+						<div className="space-y-2">
+							<Label htmlFor="classification">Classification</Label>
+							<RadioGroup
+								value={formData.classification}
+								onValueChange={(value) =>
+									setFormData((prev) => ({ ...prev, classification: value }))
+								}
+							>
+								<div className="flex items-center space-x-2">
+									<RadioGroupItem value="minor" id="minor" />
+									<Label htmlFor="minor">Minor</Label>
+								</div>
+								<div className="flex items-center space-x-2">
+									<RadioGroupItem value="major" id="major" />
+									<Label htmlFor="major">Major</Label>
+								</div>
+							</RadioGroup>
+						</div>
+					</div>
+				)}
+
 				<DialogFooter className="mt-4">
 					{!showAnalysis ? (
 						<Button
@@ -111,7 +212,7 @@ export default function SymptomAnalysisDialog() {
 								"Analyze Symptoms"
 							)}
 						</Button>
-					) : (
+					) : showAddOption ? (
 						<div className="flex gap-2 w-full">
 							<Button
 								type="button"
@@ -120,15 +221,20 @@ export default function SymptomAnalysisDialog() {
 									setShowAnalysis(false);
 									setSymptoms("");
 									setAiAnalysis(null);
+									setShowAddOption(false);
 								}}
 								className="flex-1"
 							>
-								Start Over
+								Cancel
 							</Button>
-							<Button type="submit" className="flex-1">
-								Save Analysis
+							<Button type="button" className="flex-1" onClick={addDiseaseToDatabase}>
+								Add Disease
 							</Button>
 						</div>
+					) : (
+						<Button type="submit" className="w-full">
+							Save Analysis
+						</Button>
 					)}
 				</DialogFooter>
 			</DialogContent>

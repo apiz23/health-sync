@@ -1,69 +1,92 @@
 "use client";
 
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader } from "@/components/ui/card";
 import { IoWarningOutline, IoAlertCircleOutline } from "react-icons/io5";
 import { useEffect, useState } from "react";
-import { CategorizedDiseases } from "@/interface/interface";
+import { Disease } from "@/interface/interface";
 import SymptomAnalysisDialog from "@/components/analyze-symptoms";
 import ChatDialog from "@/components/chat";
 import { Button } from "@/components/ui/button";
 import { TodayMedi } from "@/components/today-medi";
+import Loader from "@/components/loader";
+import { useAuth } from "@/providers/auth-provider";
+import supabase from "@/lib/supabase";
 
 export default function Page() {
-	const [diseases, setDiseases] = useState<CategorizedDiseases>({
-		major: [],
-		minor: [],
-	});
-	const [isLoading, setIsLoading] = useState(true);
+	const { hsUser, isLoading } = useAuth();
+	const [userName, setUserName] = useState("");
+	const [diseases, setDiseases] = useState<{
+		major: Disease[];
+		minor: Disease[];
+	}>({ major: [], minor: [] });
 
 	useEffect(() => {
+		const storedUserId = sessionStorage.getItem("userId");
+
+		if (hsUser) {
+			setUserName(hsUser.name);
+		} else if (storedUserId) {
+			const fetchUserData = async () => {
+				const { data } = await supabase
+					.from("hs_users")
+					.select("name")
+					.eq("id", storedUserId)
+					.single();
+				if (data) setUserName(data.name);
+			};
+			fetchUserData();
+		}
+
 		async function fetchDiseases() {
 			try {
-				setIsLoading(true);
 				const userId = sessionStorage.getItem("userId");
 				const response = await fetch(
-					`${process.env.NEXT_PUBLIC_NEST_API_URL}/diseases/${userId}`
+					`${process.env.NEXT_PUBLIC_NEST_API_URL}/diseases?userId=${userId}`
 				);
 				const data = await response.json();
 
 				const diseasesArray = Array.isArray(data) ? data : [data];
-				
+
 				const categorizedDiseases = {
 					major: diseasesArray.filter(
-						(d) =>
-							d.category.toLowerCase().includes("chronic") ||
-							d.category.toLowerCase().includes("major")
+						(d) => d.classification.toLowerCase() === "major"
 					),
 					minor: diseasesArray.filter(
-						(d) =>
-							!d.category.toLowerCase().includes("chronic") &&
-							!d.category.toLowerCase().includes("major")
+						(d) => d.classification.toLowerCase() === "minor"
 					),
 				};
 
 				setDiseases(categorizedDiseases);
 			} catch (error) {
 				console.error("Failed to fetch diseases:", error);
-			} finally {
-				setIsLoading(false);
 			}
 		}
 
 		fetchDiseases();
-	}, []);
+	}, [hsUser]);
 
 	if (isLoading) {
-		return (
-			<div className="min-h-screen flex items-center justify-center">
-				<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
-			</div>
-		);
+		return <Loader />;
 	}
-
 	return (
-		<div className="min-h-screen space-y-6">
+		<div className="h-fit space-y-6">
+			<h1 className="scroll-m-20 text-3xl font-medium tracking-tight lg:text-4xl my-10 text-center">
+				Welcome {userName ? <span className="font-bold">{userName}</span> : "Guest"}
+			</h1>
+			{/* Quick Actions */}
+			<div className="py-6">
+				<h2 className="text-3xl font-semibold mb-4">Quick Actions</h2>
+				<div className="grid grid-cols-1 md:grid-cols-3 md:gap-4">
+					<Link href="/medications" className="py-2 rounded text-center">
+						<Button variant="outline" className="text-black w-full bg-white">
+							Add Medication Reminder
+						</Button>
+					</Link>
+					<SymptomAnalysisDialog />
+					<ChatDialog />
+				</div>
+			</div>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 				{/* Major Conditions */}
 				<Card className="p-6 bg-red-50 border-red-200">
@@ -81,14 +104,11 @@ export default function Page() {
 									<div className="flex justify-between items-start">
 										<div>
 											<h3 className="font-medium text-red-900">{disease.name}</h3>
-											<p className="text-sm text-gray-600">Category: {disease.category}</p>
-											<p className="text-sm text-gray-600 mt-1">{disease.description}</p>
-											<p className="text-xs text-gray-500 mt-2">
-												Added:
-												{new Date(disease.created_at).toLocaleDateString()}
+											<p className="text-sm text-gray-600">
+												Category: {disease.classification}
 											</p>
+											<p className="text-sm text-gray-600 mt-1">{disease.description}</p>
 										</div>
-										<Badge className="bg-red-100 text-red-700">{disease.category}</Badge>
 									</div>
 								</div>
 							))
@@ -116,15 +136,11 @@ export default function Page() {
 									<div className="flex justify-between items-start">
 										<div>
 											<h3 className="font-medium text-yellow-900">{disease.name}</h3>
-											<p className="text-sm text-gray-600">Category: {disease.category}</p>
-											<p className="text-sm text-gray-600 mt-1">{disease.description}</p>
-											<p className="text-xs text-gray-500 mt-2">
-												Added: {new Date(disease.created_at).toLocaleDateString()}
+											<p className="text-sm text-gray-600">
+												Category: {disease.classification}
 											</p>
+											<p className="text-sm text-gray-600 mt-1">{disease.description}</p>
 										</div>
-										<Badge className="bg-yellow-100 text-yellow-700">
-											{disease.category}
-										</Badge>
 									</div>
 								</div>
 							))
@@ -133,20 +149,6 @@ export default function Page() {
 						)}
 					</div>
 				</Card>
-			</div>
-
-			{/* Quick Actions */}
-			<div className="py-6">
-				<h2 className="text-3xl font-semibold mb-4">Quick Actions</h2>
-				<div className="flex justify-left gap-4">
-					<Link href="/medications" className="py-2 rounded text-center">
-						<Button variant="default" className="text-white">
-							Add Medication Reminder
-						</Button>
-					</Link>
-					<SymptomAnalysisDialog />
-					<ChatDialog />
-				</div>
 			</div>
 
 			{/* Today's Schedule */}
