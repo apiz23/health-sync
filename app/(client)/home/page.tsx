@@ -6,7 +6,7 @@ import { IoWarningOutline, IoAlertCircleOutline } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import { Disease } from "@/interface/interface";
 import SymptomAnalysisDialog from "@/components/analyze-symptoms";
-import ChatDialog from "@/components/chat";
+import ChatDialog from "@/components/ai-chat";
 import { Button } from "@/components/ui/button";
 import { TodayMedi } from "@/components/today-medi";
 import Loader from "@/components/loader";
@@ -79,7 +79,7 @@ export default function Page() {
 				<h2 className="text-3xl font-semibold mb-4">Quick Actions</h2>
 				<div className="grid grid-cols-1 md:grid-cols-3 md:gap-4">
 					<Link href="/medications" className="py-2 rounded text-center">
-						<Button variant="outline" className="text-black w-full bg-white">
+						<Button variant="default" className="w-full">
 							Add Medication Reminder
 						</Button>
 					</Link>
@@ -89,17 +89,17 @@ export default function Page() {
 			</div>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 				{/* Major Conditions */}
-				<Card className="p-6 bg-red-50 border-red-200">
+				<Card className="p-6 bg-[#A6CDC6]">
 					<CardHeader className="flex items-center gap-2 mb-4">
 						<IoWarningOutline className="text-red-600 w-6 h-6" />
-						<h2 className="text-xl font-semibold text-red-900">Major Conditions</h2>
+						<h2 className="text-xl font-semibold text-[#16404D]">Major Conditions</h2>
 					</CardHeader>
 					<div className="space-y-3">
 						{diseases.major.length > 0 ? (
 							diseases.major.map((disease) => (
 								<div
 									key={disease.id}
-									className="bg-white p-4 rounded-lg border border-red-200"
+									className="bg-white p-4 rounded-lg"
 								>
 									<div className="flex justify-between items-start">
 										<div>
@@ -119,19 +119,17 @@ export default function Page() {
 				</Card>
 
 				{/* Minor Conditions */}
-				<Card className="p-6 bg-yellow-50 border-yellow-200">
+				<Card className="p-6 bg-[#A6CDC6]">
 					<CardHeader className="flex items-center gap-2 mb-4">
 						<IoAlertCircleOutline className="text-yellow-600 w-6 h-6" />
-						<h2 className="text-xl font-semibold text-yellow-900">
-							Minor Conditions
-						</h2>
+						<h2 className="text-xl font-semibold text-[#16404D]">Minor Conditions</h2>
 					</CardHeader>
 					<div className="space-y-3">
 						{diseases.minor.length > 0 ? (
 							diseases.minor.map((disease) => (
 								<div
 									key={disease.id}
-									className="bg-white p-4 rounded-lg border border-yellow-200"
+									className="bg-white p-4 rounded-lg"
 								>
 									<div className="flex justify-between items-start">
 										<div>

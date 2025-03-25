@@ -62,7 +62,7 @@ export function TodayMedi() {
 	}
 
 	return (
-		<div className="bg-white p-6 rounded-lg shadow">
+		<div className="bg-[#A6CDC6] p-6 rounded-lg shadow">
 			<h2 className="text-xl font-semibold mb-4">Today{"'"}s Schedule</h2>
 
 			{todaysMedications.length > 0 ? (

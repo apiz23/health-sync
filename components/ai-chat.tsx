@@ -62,7 +62,7 @@ export default function ChatDialog() {
 	return (
 		<Dialog>
 			<DialogTrigger className="py-2 text-center">
-				<Button variant="outline" className="text-black w-full bg-white">
+				<Button variant="default" className="w-full">
 					Start Chat Session
 				</Button>
 			</DialogTrigger>
