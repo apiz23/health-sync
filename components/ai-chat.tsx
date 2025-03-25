@@ -68,7 +68,7 @@ export default function ChatDialog() {
 			</DialogTrigger>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>Chatting With AI</DialogTitle>
+					<DialogTitle className="text-black">Chatting With AI</DialogTitle>
 					<DialogDescription>
 						Ask Anything related your physical or diseases
 					</DialogDescription>
@@ -115,7 +115,7 @@ export default function ChatDialog() {
 							onKeyDown={async (e) => {
 								if (e.key === "Enter") await sendMessage();
 							}}
-							className="flex-1 p-2 border rounded-lg"
+							className="flex-1 p-2 border rounded-lg text-black"
 							placeholder="Type your message..."
 						/>
 						<Button

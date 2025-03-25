@@ -114,7 +114,7 @@ export default function SymptomAnalysisDialog() {
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[500px]">
 				<DialogHeader>
-					<DialogTitle>Diagnose Symptoms</DialogTitle>
+					<DialogTitle className="text-black">Diagnose Symptoms</DialogTitle>
 					<DialogDescription>
 						Describe your symptoms, and our AI will analyze them.
 					</DialogDescription>
@@ -122,11 +122,13 @@ export default function SymptomAnalysisDialog() {
 
 				<div className="mt-4 space-y-4">
 					<div className="space-y-2">
-						<Label htmlFor="symptoms">Describe your symptoms</Label>
+						<Label htmlFor="symptoms" className="text-black">
+							Describe your symptoms
+						</Label>
 						<Textarea
 							id="symptoms"
 							placeholder="Example: I have been experiencing headaches, fever, and fatigue for the past 2 days..."
-							className="h-32"
+							className="h-32 text-black"
 							value={symptoms}
 							onChange={(e) => setSymptoms(e.target.value)}
 						/>

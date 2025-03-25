@@ -126,7 +126,7 @@ export default function Page() {
 								Add Disease
 							</Button>
 						</DialogTrigger>
-						<DialogContent className="p-4">
+						<DialogContent className="p-4 text-black">
 							<DialogHeader>
 								<DialogTitle>Add New Disease</DialogTitle>
 							</DialogHeader>
@@ -185,9 +185,11 @@ export default function Page() {
 										onChange={handleChange}
 									/>
 								</div>
-								<Button type="submit" className="w-full">
-									Add Disease
-								</Button>
+								<div className="flex justify-end">
+									<Button type="submit" className="w-fit">
+										Add Disease
+									</Button>
+								</div>
 							</form>
 						</DialogContent>
 					</Dialog>
