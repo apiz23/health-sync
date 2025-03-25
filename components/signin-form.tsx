@@ -49,8 +49,10 @@ export function SignInForm({
 
 			toast.success("Login successful!");
 			router.replace("/home");
-		} catch (err: any) {
-			toast.error(err.message || "Login failed");
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				toast.error(error.message || "Login failed");
+			}
 		} finally {
 			setIsLoading(false);
 		}

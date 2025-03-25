@@ -101,9 +101,14 @@ export default function Page() {
 			toast.success("Disease added successfully!");
 
 			fetchDiseases();
-		} catch (error: any) {
-			console.error("Error adding disease:", error);
-			alert(error.message || "An error occurred while adding the disease.");
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				console.error("Error adding disease:", error);
+				alert(error.message || "An error occurred while adding the disease.");
+			} else {
+				console.error("Unexpected error:", error);
+				alert("An unexpected error occurred.");
+			}
 		}
 	};
 

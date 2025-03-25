@@ -1,8 +1,9 @@
+import { Medication } from "@/interface/interface";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
 export function TodayMedi() {
-	const [medications, setMedications] = useState<any[]>([]);
+	const [medications, setMedications] = useState<Medication[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
@@ -42,7 +43,7 @@ export function TodayMedi() {
 		return `${year}-${month}-${day}`;
 	};
 
-	const todaysMedications = medications.filter((medication) => {
+	const todaysMedications = medications.filter((medication: Medication) => {
 		const today = getLocalDate();
 		const medStartDate = new Date(medication.start_date).toLocaleDateString(
 			"en-CA"

@@ -1,14 +1,17 @@
-"use client"
+"use client";
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
 	const router = useRouter();
+	const isAuthenticated = false;
 
 	useEffect(() => {
-		router.push("/auth");
-	}, []);
+		if (!isAuthenticated) {
+			router.push("/auth");
+		}
+	}, [isAuthenticated, router]);
 
 	return null;
 }
