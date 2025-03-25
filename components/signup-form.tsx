@@ -30,35 +30,19 @@ export function SignUpForm() {
 		setIsLoading(true);
 
 		try {
-			const {
-				data: { user },
-				error: signUpError,
-			} = await supabase.auth.signUp({
-				email: formData.email,
-				password: formData.password,
-				options: {
-					data: {
-						name: formData.name,
-					},
+			const { error: insertError } = await supabase.from("hs_users").insert([
+				{
+					id: crypto.randomUUID(), 
+					name: formData.name,
+					email: formData.email,
+					password: formData.password, 
 				},
-			});
+			]);
 
-			if (signUpError) throw signUpError;
+			if (insertError) throw insertError;
 
-			if (user) {
-				const { error: insertError } = await supabase.from("hs_users").insert([
-					{
-						id: user.id,
-						name: formData.name,
-						email: formData.email,
-					},
-				]);
-
-				if (insertError) throw insertError;
-
-				toast.success("Account created successfully!");
-				router.push("/dashboard");
-			}
+			toast.success("Account created successfully!");
+			router.push("/home");
 		} catch (error) {
 			toast.error("Failed to create account");
 			console.error(error);

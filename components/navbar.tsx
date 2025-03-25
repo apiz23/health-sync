@@ -49,7 +49,7 @@ export default function Navbar() {
 						<SheetTrigger>
 							<IoMenuSharp size={40} />
 						</SheetTrigger>
-						<SheetContent>
+						<SheetContent className="text-black rounded-s-xl bg-neutral-200">
 							<SheetHeader className="flex items-center gap-2">
 								<Link href="/" className="text-2xl">
 									HS
