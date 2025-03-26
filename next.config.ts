@@ -12,5 +12,7 @@ const nextConfig: NextConfig = {
 	// Add other Next.js config options here
 };
 
-// Wrap your Next.js config with the PWA plugin
-export default withPWA(nextConfig);
+// Conditionally wrap the Next.js config with the PWA plugin
+const isDevelopment = process.env.NODE_ENV === "development";
+
+export default isDevelopment ? nextConfig : withPWA(nextConfig);
