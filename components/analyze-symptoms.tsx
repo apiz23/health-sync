@@ -79,16 +79,13 @@ export default function SymptomAnalysisDialog() {
 
 	const addDiseaseToDatabase = async () => {
 		try {
-			const response = await fetch(
-				`${process.env.NEXT_PUBLIC_NEST_API_URL}/add-disease`,
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(formData),
-				}
-			);
+			const response = await fetch(`api/add-disease`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(formData),
+			});
 
 			if (!response.ok) {
 				throw new Error("Failed to add disease.");

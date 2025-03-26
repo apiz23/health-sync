@@ -36,9 +36,7 @@ export default function Page() {
 
 	const fetchDiseases = async () => {
 		try {
-			const response = await fetch(
-				`${process.env.NEXT_PUBLIC_NEST_API_URL}/diseases?userId=${formData.userId}`
-			);
+			const response = await fetch(`/api/diseases?userId=${formData.userId}`);
 
 			if (!response.ok) {
 				throw new Error("Failed to fetch diseases.");
@@ -74,23 +72,20 @@ export default function Page() {
 		}
 
 		try {
-			const response = await fetch(
-				`${process.env.NEXT_PUBLIC_NEST_API_URL}/diseases/addDisease`,
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(formData),
-				}
-			);
+			const response = await fetch(`/api/diseases/add`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(formData),
+			});
 
 			const text = await response.text();
 
 			if (!response.ok) {
 				throw new Error(text || "Failed to add disease.");
 			}
-
+			console.log(formData.userId);
 			setFormData({
 				userId: formData.userId,
 				name: "",
@@ -104,7 +99,7 @@ export default function Page() {
 		} catch (error: unknown) {
 			if (error instanceof Error) {
 				console.error("Error adding disease:", error);
-				alert(error.message || "An error occurred while adding the disease.");
+				alert("An error occurred while adding the disease.");
 			} else {
 				console.error("Unexpected error:", error);
 				alert("An unexpected error occurred.");

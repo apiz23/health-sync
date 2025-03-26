@@ -40,9 +40,7 @@ export function MedicationForm() {
 	useEffect(() => {
 		const fetchDiseases = async () => {
 			try {
-				const response = await fetch(
-					`${process.env.NEXT_PUBLIC_NEST_API_URL}/diseases?userId=${userId}`
-				);
+				const response = await fetch(`api/diseases?userId=${userId}`);
 				if (!response.ok) throw new Error("Failed to fetch diseases");
 				const data = await response.json();
 				setDiseases(data);
@@ -66,16 +64,13 @@ export function MedicationForm() {
 
 			console.log("Sending payload:", payload);
 
-			const response = await fetch(
-				`${process.env.NEXT_PUBLIC_NEST_API_URL}/medications/addMedication`,
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(payload),
-				}
-			);
+			const response = await fetch(`api/medications/add`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(payload),
+			});
 
 			if (!response.ok) {
 				const errorData = await response.json();

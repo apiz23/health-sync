@@ -30,9 +30,7 @@ export function MedicationList() {
 
 		const fetchMedications = async () => {
 			try {
-				const response = await fetch(
-					`${process.env.NEXT_PUBLIC_NEST_API_URL}/medications?userId=${userId}`
-				);
+				const response = await fetch(`api/medications?userId=${userId}`);
 				const responseData = await response.json();
 				setMedications(Array.isArray(responseData.data) ? responseData.data : []);
 			} catch (error) {
@@ -46,9 +44,7 @@ export function MedicationList() {
 
 		const fetchDiseases = async () => {
 			try {
-				const response = await fetch(
-					`${process.env.NEXT_PUBLIC_NEST_API_URL}/diseases?userId=${userId}`
-				);
+				const response = await fetch(`api/diseases?userId=${userId}`);
 				if (!response.ok) throw new Error("Failed to fetch diseases.");
 				const data = await response.json();
 				setDiseases(data);

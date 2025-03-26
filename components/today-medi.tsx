@@ -17,9 +17,7 @@ export function TodayMedi() {
 			}
 
 			try {
-				const response = await fetch(
-					`${process.env.NEXT_PUBLIC_NEST_API_URL}/medications?userId=${userId}`
-				);
+				const response = await fetch(`api/medications?userId=${userId}`);
 				const responseData = await response.json();
 
 				setMedications(responseData.data || []);
@@ -63,7 +61,9 @@ export function TodayMedi() {
 
 	return (
 		<div className="bg-[#A6CDC6] p-6 rounded-lg shadow">
-			<h2 className="text-xl font-semibold mb-4 text-black">Today{"'"}s Schedule</h2>
+			<h2 className="text-xl font-semibold mb-4 text-black">
+				Today{"'"}s Schedule
+			</h2>
 
 			{todaysMedications.length > 0 ? (
 				<ul className="space-y-2">

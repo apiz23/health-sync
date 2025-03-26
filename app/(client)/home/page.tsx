@@ -41,9 +41,7 @@ export default function Page() {
 		async function fetchDiseases() {
 			try {
 				const userId = sessionStorage.getItem("userId");
-				const response = await fetch(
-					`${process.env.NEXT_PUBLIC_NEST_API_URL}/diseases?userId=${userId}`
-				);
+				const response = await fetch(`api/diseases?userId=${userId}`);
 				const data = await response.json();
 
 				const diseasesArray = Array.isArray(data) ? data : [data];
