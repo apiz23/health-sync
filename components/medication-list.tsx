@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { MedicationForm } from "./medication-form";
 import {
 	Dialog,
 	DialogClose,
@@ -91,16 +90,12 @@ export function MedicationList() {
 	}
 
 	return (
-		<div className="h-fit space-y-4">
-			{/* Medication Form */}
-			<div className="flex justify-between items-center">
-				<MedicationForm />
-			</div>
-
+		<div className="h-fit py-10">
+			<h2 className="text-2xl font-bold mb-4">Your Medications</h2>
 			{/* Medication List */}
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 				{medications.map((medication) => (
-					<Card key={medication.id} className="space-y-3">
+					<Card key={medication.id} className="space-y-3 bg-[#A6CDC6]">
 						<Dialog>
 							<CardHeader className="flex justify-between">
 								<div className="text-left">

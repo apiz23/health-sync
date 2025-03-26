@@ -201,11 +201,14 @@ export default function Page() {
 					{diseases.length > 0 ? (
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							{diseases.map((disease) => (
-								<Card key={disease.id} className="border rounded-lg shadow bg-white">
+								<Card
+									key={disease.id}
+									className="border rounded-lg shadow bg-[#A6CDC6]"
+								>
 									<Dialog>
 										<CardHeader className="flex justify-between">
 											<div className="text-left">
-												<p>Medication Name: {disease.name}</p>
+												<p>Disease Name: {disease.name}</p>
 											</div>
 										</CardHeader>
 										<CardContent className="flex justify-end">

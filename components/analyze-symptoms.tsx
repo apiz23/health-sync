@@ -135,7 +135,7 @@ export default function SymptomAnalysisDialog() {
 					</div>
 
 					{showAnalysis && aiAnalysis && (
-						<div className="border rounded-lg p-4 bg-gray-100">
+						<div className="border rounded-lg p-4 bg-gray-100 text-black">
 							<p>
 								<strong>Possible Disease:</strong>{" "}
 								{aiAnalysis.possible_disease || "Unknown"}
@@ -153,7 +153,7 @@ export default function SymptomAnalysisDialog() {
 				</div>
 
 				{showAddOption && (
-					<div className="mt-4 space-y-4">
+					<div className="mt-4 space-y-4 text-black">
 						<h3 className="text-lg font-semibold">
 							Do you want to add this disease?
 						</h3>
@@ -225,7 +225,7 @@ export default function SymptomAnalysisDialog() {
 									setAiAnalysis(null);
 									setShowAddOption(false);
 								}}
-								className="flex-1"
+								className="flex-1 text-black"
 							>
 								Cancel
 							</Button>
