@@ -75,7 +75,7 @@ export default function Page() {
 
 		try {
 			const response = await fetch(
-				`${process.env.NEXT_PUBLIC_NEST_API_URL}/diseases`,
+				`${process.env.NEXT_PUBLIC_NEST_API_URL}/diseases/addDisease`,
 				{
 					method: "POST",
 					headers: {
