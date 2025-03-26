@@ -3,12 +3,10 @@
 import supabase from "@/lib/supabase";
 import { NextResponse } from "next/server";
 
-export async function DELETE(
-	req: Request,
-	{ params }: { params: { id: string } }
-) {
+export async function DELETE(req: Request) {
 	try {
-		const { id } = params;
+		const url = new URL(req.url);
+		const id = url.pathname.split("/").pop(); 
 
 		if (!id) {
 			return NextResponse.json(
