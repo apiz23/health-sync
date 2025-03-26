@@ -9,6 +9,7 @@ const poppins = Poppins({ subsets: ["latin-ext"], weight: ["500"] });
 export const metadata: Metadata = {
 	title: "HealthCare AI",
 	description: "Your personal health assistant",
+	manifest: "/manifest.json",
 };
 
 export default function RootLayout({

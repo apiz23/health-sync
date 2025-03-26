@@ -1,0 +1,26 @@
+{
+	"theme_color": "#000000",
+	"background_color": "#000000",
+	"icons": [
+		{
+			"purpose": "maskable",
+			"sizes": "512x512",
+			"src": "icon512_maskable.png",
+			"type": "image/png"
+		},
+		{
+			"purpose": "any",
+			"sizes": "512x512",
+			"src": "icon512_rounded.png",
+			"type": "image/png"
+		}
+	],
+	"orientation": "any",
+	"display": "standalone",
+	"dir": "auto",
+	"lang": "en-US",
+	"name": "Health Sync",
+	"short_name": "HealthSync",
+	"start_url": "https://health-sync-prod.vercel.app/auth",
+	"scope": "https://health-sync-prod.vercel.app/"
+}
