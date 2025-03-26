@@ -18,47 +18,17 @@ export async function GET(req: Request) {
 			.select("*")
 			.eq("user_id", userId);
 
-		if (error) throw error;
+		if (error) throw new Error(error.message);
 
 		return NextResponse.json(data, { status: 200 });
-	} catch (error: any) {
-		console.error("Error fetching diseases:", error.message);
-		return NextResponse.json(
-			{ message: "Internal Server Error" },
-			{ status: 500 }
-		);
-	}
-}
-
-export async function POST(req: Request) {
-	try {
-		const { userId, name, category, classification, description } =
-			await req.json();
-
-		if (!userId || !name || !category) {
-			return NextResponse.json(
-				{ message: "User ID, Name, and Category are required" },
-				{ status: 400 }
-			);
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			console.error("Error fetching diseases:", error.message);
+			return NextResponse.json({ message: error.message }, { status: 500 });
 		}
 
-		const { data, error } = await supabase.from("hs_diseases").insert([
-			{
-				user_id: userId,
-				name,
-				category,
-				classification,
-				description,
-			},
-		]);
-
-		if (error) throw error;
-
-		return NextResponse.json(data, { status: 201 });
-	} catch (error: any) {
-		console.error("Error adding disease:", error.message);
 		return NextResponse.json(
-			{ message: "Internal Server Error" },
+			{ message: "An unknown error occurred" },
 			{ status: 500 }
 		);
 	}

@@ -23,13 +23,17 @@ export async function POST(req: Request) {
 			},
 		]);
 
-		if (error) throw error;
+		if (error) throw new Error(error.message);
 
 		return NextResponse.json(data, { status: 201 });
-	} catch (error: any) {
-		console.error("Error adding disease:", error.message);
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			console.error("Error adding disease:", error.message);
+			return NextResponse.json({ message: error.message }, { status: 500 });
+		}
+
 		return NextResponse.json(
-			{ message: "Internal Server Error" },
+			{ message: "An unknown error occurred" },
 			{ status: 500 }
 		);
 	}
