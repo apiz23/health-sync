@@ -64,6 +64,22 @@ export function MedicationList() {
 		return disease ? disease.name : "Unknown Disease";
 	};
 
+	const handleDelete = async (id: string) => {
+		try {
+			const response = await fetch(`/api/medications/${id}`, {
+				method: "DELETE",
+			});
+
+			if (!response.ok) throw new Error("Failed to delete medication");
+
+			setMedications((prev) => prev.filter((med) => med.id !== id));
+			toast.success("Medication deleted successfully");
+		} catch (error) {
+			console.error("Error deleting medication:", error);
+			toast.error("Failed to delete medication");
+		}
+	};
+
 	// Loading state
 	if (isLoading) return <Loader />;
 
@@ -177,6 +193,14 @@ export function MedicationList() {
 
 								{/* Close Button */}
 								<DialogFooter>
+									<DialogClose>
+										<Button
+											variant="destructive"
+											onClick={() => handleDelete(medication.id)}
+										>
+											Delete
+										</Button>
+									</DialogClose>
 									<DialogClose>
 										<Button variant="outline" className="text-black">
 											Cancel

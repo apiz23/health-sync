@@ -10,6 +10,7 @@ import { Disease } from "@/interface/interface";
 import {
 	Dialog,
 	DialogContent,
+	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
@@ -104,6 +105,24 @@ export default function Page() {
 				console.error("Unexpected error:", error);
 				alert("An unexpected error occurred.");
 			}
+		}
+	};
+
+	const handleDelete = async (id: string) => {
+		try {
+			const response = await fetch(`/api/diseases/${id}`, {
+				method: "DELETE",
+			});
+
+			if (!response.ok) {
+				throw new Error("Failed to delete disease.");
+			}
+
+			toast.success("Disease deleted successfully!");
+			setDiseases((prev) => prev.filter((disease) => disease.id !== id));
+		} catch (error) {
+			console.error("Error deleting disease:", error);
+			toast.error("Failed to delete disease.");
 		}
 	};
 
@@ -239,6 +258,14 @@ export default function Page() {
 													</div>
 												</dl>
 											</div>
+											<DialogFooter>
+												<Button
+													variant="destructive"
+													onClick={() => handleDelete(disease.id)}
+												>
+													Delete
+												</Button>
+											</DialogFooter>
 										</DialogContent>
 									</Dialog>
 								</Card>
