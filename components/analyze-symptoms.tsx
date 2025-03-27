@@ -159,7 +159,7 @@ export default function SymptomAnalysisDialog() {
 							</Label>
 
 							<p className="text-xs text-gray-500">
-								Please choose based on the doctor's prescription.
+								Please choose based on the doctor{"'"}s prescription.
 							</p>
 
 							<Input

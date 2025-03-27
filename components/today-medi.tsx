@@ -53,7 +53,7 @@ export function TodayMedi() {
 		return (
 			<div className="bg-[#FCFFE7] p-6 rounded-lg shadow-md border border-gray-100">
 				<h2 className="text-xl font-semibold text-gray-800 mb-4">
-					Today's Schedule
+					Today{"'"}s Schedule
 				</h2>
 				<p className="text-gray-500">Loading...</p>
 			</div>
@@ -63,7 +63,7 @@ export function TodayMedi() {
 	return (
 		<div className="bg-[#FCFFE7] p-6 rounded-lg shadow-md border border-gray-100">
 			<h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
-				<FaPills /> Today's Schedule
+				<FaPills /> Today{"'"}s Schedule
 			</h2>
 
 			{todaysMedications.length > 0 ? (
