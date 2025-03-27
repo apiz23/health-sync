@@ -29,6 +29,10 @@ Ensure you have the following installed on your system:
 - **pnpm** (Package manager for efficient dependency management)
 - **Python 3.9+** (For FastAPI backend)
 
+## Credential Login
+- **Email**: admin1234@gmail.com
+- **Password**: 123456
+
 ### **Clone the Repository**
 ```sh
 git clone https://github.com/yourusername/health-management-pwa.git
