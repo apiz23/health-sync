@@ -17,6 +17,7 @@ import { Loader } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
 import { AiAnalysis } from "@/interface/interface";
+import { toast } from "sonner";
 
 export default function SymptomAnalysisDialog() {
 	const [symptoms, setSymptoms] = useState("");
@@ -70,15 +71,16 @@ export default function SymptomAnalysisDialog() {
 			setShowAddOption(true);
 		} catch (error) {
 			console.error("Error:", error);
-			alert("Something went wrong while analyzing. Please try again.");
+			toast.error("Something went wrong while analyzing. Please try again.");
 		} finally {
 			setIsAnalyzing(false);
 		}
 	};
 
-	const addDiseaseToDatabase = async () => {
+	const addDisease = async () => {
 		try {
-			const response = await fetch(`api/add-disease`, {
+			console.log(formData);
+			const response = await fetch(`api/diseases/add`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -90,14 +92,14 @@ export default function SymptomAnalysisDialog() {
 				throw new Error("Failed to add disease.");
 			}
 
-			alert("Disease added successfully!");
+			toast.success("Disease added successfully!");
 			setShowAddOption(false);
 			setShowAnalysis(false);
 			setSymptoms("");
 			setAiAnalysis(null);
 		} catch (error) {
 			console.error("Error:", error);
-			alert("Something went wrong while adding the disease.");
+			toast.error("Something went wrong while adding the disease.");
 		}
 	};
 
@@ -154,9 +156,7 @@ export default function SymptomAnalysisDialog() {
 							Do you want to add this disease?
 						</h3>
 						<div className="space-y-2">
-							<Label htmlFor="name">
-								Disease Name
-							</Label>
+							<Label htmlFor="name">Disease Name</Label>
 
 							<p className="text-xs text-gray-500">
 								Please choose based on the doctor{"'"}s prescription.
@@ -224,7 +224,7 @@ export default function SymptomAnalysisDialog() {
 							>
 								Cancel
 							</Button>
-							<Button type="button" className="flex-1" onClick={addDiseaseToDatabase}>
+							<Button type="button" className="flex-1" onClick={addDisease}>
 								Add Disease
 							</Button>
 						</div>
