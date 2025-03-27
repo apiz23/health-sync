@@ -1,4 +1,4 @@
-# Health Management PWA
+# Health Sync PWA
 
 ## Introduction
 This project is designed to provide a comprehensive solution for managing personal health and wellness. It focuses on helping users track their medications, monitor their health conditions, and stay organized with reminders and schedules. The goal is to empower individuals to take control of their health in a simple and efficient way.
