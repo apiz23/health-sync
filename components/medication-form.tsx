@@ -61,9 +61,6 @@ export function MedicationForm() {
 				...formData,
 				userId: userId,
 			};
-
-			console.log("Sending payload:", payload);
-
 			const response = await fetch(`api/medications/add`, {
 				method: "POST",
 				headers: {
@@ -102,7 +99,7 @@ export function MedicationForm() {
 					Add New Medication
 				</Button>
 			</DialogTrigger>
-			<DialogContent className="overflow-auto p-6 h-[60vh] min-w-fit">
+			<DialogContent className="overflow-auto p-6 h-[80vh] min-w-fit">
 				<DialogHeader>
 					<DialogTitle className="text-black">Add Medication Reminder</DialogTitle>
 					<DialogDescription>

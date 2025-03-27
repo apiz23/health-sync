@@ -3,10 +3,9 @@ import supabase from "@/lib/supabase";
 
 export async function POST(req: Request) {
 	try {
-		const { userId, name, category, classification, description } =
-			await req.json();
+		const { userId, name, classification, description } = await req.json();
 
-		if (!userId || !name || !category) {
+		if (!userId || !name) {
 			return NextResponse.json(
 				{ message: "User ID, Name, and Category are required" },
 				{ status: 400 }
@@ -17,7 +16,6 @@ export async function POST(req: Request) {
 			{
 				user_id: userId,
 				name,
-				category,
 				classification,
 				description,
 			},

@@ -13,7 +13,7 @@ export default function Page() {
 			{/* Introduction */}
 			<section className="mb-10">
 				<h2 className="text-3xl font-bold mb-4">Introduction</h2>
-				<p className="text-lg text-gray-700 dark:text-gray-300">
+				<p className="text-lg">
 					This project is designed to provide a comprehensive solution for managing
 					personal health and wellness. It focuses on helping users track their
 					medications, monitor their health conditions, and stay organized with
@@ -25,7 +25,7 @@ export default function Page() {
 			{/* Key Features */}
 			<section className="mb-10">
 				<h2 className="text-3xl font-bold mb-4">Key Features</h2>
-				<ul className="list-disc pl-6 text-lg text-gray-700 dark:text-gray-300 space-y-2">
+				<ul className="list-disc pl-6 text-lg space-y-2">
 					<li>
 						<strong>Medication Reminders:</strong> Set up personalized reminders for
 						taking medications at specific times.
@@ -52,27 +52,24 @@ export default function Page() {
 			{/* Technologies Used */}
 			<section className="mb-10">
 				<h2 className="text-3xl font-bold mb-4">Technologies Used</h2>
-				<p className="text-lg text-gray-700 dark:text-gray-300 mb-4">
+				<p className="text-lg mb-4">
 					This project leverages modern technologies to deliver a seamless user
 					experience:
 				</p>
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-					<div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-md">
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-black">
+					<div className="bg-[#FCFFE7] p-6 rounded-lg shadow-md">
 						<h3 className="text-xl font-semibold mb-2">Frontend</h3>
-						<ul className="list-disc pl-6 text-gray-700 dark:text-gray-300">
-							<li>React.js</li>
+						<ul className="list-disc pl-6">
 							<li>Next.js</li>
 							<li>Tailwind CSS</li>
 							<li>Shadcn UI Components</li>
 						</ul>
 					</div>
-					<div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-md">
+					<div className="bg-[#FCFFE7] p-6 rounded-lg shadow-md">
 						<h3 className="text-xl font-semibold mb-2">Backend</h3>
-						<ul className="list-disc pl-6 text-gray-700 dark:text-gray-300">
-							<li>NestJS</li>
-							<li>Express.js</li>
-							<li>MongoDB</li>
-							<li>Prisma ORM</li>
+						<ul className="list-disc pl-6">
+							<li>FastAPI</li>
+							<li>Next.js API</li>
 						</ul>
 					</div>
 				</div>
@@ -81,7 +78,7 @@ export default function Page() {
 			{/* Conclusion */}
 			<section className="text-center">
 				<h2 className="text-3xl font-bold mb-4">Conclusion</h2>
-				<p className="text-lg text-gray-700 dark:text-gray-300">
+				<p className="text-lg">
 					This project aims to simplify health management by providing a robust and
 					user-friendly platform. Whether you{"'"}re managing chronic conditions or
 					simply staying on top of your daily health routines, this application is

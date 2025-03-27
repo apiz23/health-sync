@@ -81,7 +81,7 @@ export default function ChatDialog() {
 								key={index}
 								className={`p-2 rounded-lg w-fit max-w-[75%] whitespace-pre-wrap ${
 									msg.role === "user"
-										? "bg-blue-500 text-white ml-auto text-right"
+										? "bg-black text-white ml-auto text-right"
 										: "bg-gray-300 text-black mr-auto text-left"
 								}`}
 							>
@@ -120,7 +120,7 @@ export default function ChatDialog() {
 						/>
 						<Button
 							onClick={sendMessage}
-							className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+							className="text-white px-4 py-2 rounded-lg"
 						>
 							Send
 						</Button>

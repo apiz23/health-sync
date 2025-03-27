@@ -58,7 +58,6 @@ export function MedicationList() {
 		fetchDiseases();
 	}, [userId]);
 
-	// Helper function to get disease name
 	const getDiseaseName = (diseaseId: string) => {
 		const disease = diseases.find((d) => d.id === diseaseId);
 		return disease ? disease.name : "Unknown Disease";
@@ -95,19 +94,18 @@ export function MedicationList() {
 	// No medications found
 	if (medications.length === 0) {
 		return (
-			<div className="text-center p-4 text-gray-500">
+			<div className="text-center p-4 text-gray-500 pt-32">
 				No medications found. Add your first medication to get started.
 			</div>
 		);
 	}
 
 	return (
-		<div className="h-fit py-10">
-			<h2 className="text-2xl font-bold mb-4">Your Medications</h2>
+		<div className="h-fit mt-10 min-h-[50vh] overflow-auto">
 			{/* Medication List */}
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 				{medications.map((medication) => (
-					<Card key={medication.id} className="space-y-3 bg-[#A6CDC6]">
+					<Card key={medication.id} className="space-y-3 bg-[#FCFFE7]">
 						<Dialog>
 							<CardHeader className="flex justify-between">
 								<div className="text-left">

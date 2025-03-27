@@ -210,14 +210,13 @@ export default function Page() {
 				</div>
 
 				{/* Disease List */}
-				<div className="mt-10">
-					<h2 className="text-2xl font-bold mb-4">Your Diseases</h2>
+				<div className="mt-10 min-h-[50vh]">
 					{diseases.length > 0 ? (
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							{diseases.map((disease) => (
 								<Card
 									key={disease.id}
-									className="border rounded-lg shadow bg-[#A6CDC6]"
+									className="border rounded-lg shadow bg-[#FCFFE7]"
 								>
 									<Dialog>
 										<CardHeader className="flex justify-between">
@@ -238,12 +237,6 @@ export default function Page() {
 											</DialogHeader>
 											<div className="flow-root">
 												<dl className="divide-y divide-gray-200 text-sm">
-													<div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-														<dt className="font-medium text-gray-900">Category</dt>
-														<dd className="text-gray-700 sm:col-span-2">
-															{disease?.category}
-														</dd>
-													</div>
 													<div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
 														<dt className="font-medium text-gray-900">Classification</dt>
 														<dd className="text-gray-700 sm:col-span-2">
@@ -272,7 +265,9 @@ export default function Page() {
 							))}
 						</div>
 					) : (
-						<p className="text-gray-500">No diseases found.</p>
+						<div className="text-center p-4 text-gray-500 pt-32">
+							No diseases found. Add your first disease to get started.
+						</div>
 					)}
 				</div>
 			</div>

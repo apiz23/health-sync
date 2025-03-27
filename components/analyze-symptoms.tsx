@@ -27,7 +27,6 @@ export default function SymptomAnalysisDialog() {
 	const [formData, setFormData] = useState({
 		userId: "",
 		name: "",
-		category: "",
 		classification: "minor",
 		description: "",
 	});
@@ -155,23 +154,22 @@ export default function SymptomAnalysisDialog() {
 							Do you want to add this disease?
 						</h3>
 						<div className="space-y-2">
-							<Label htmlFor="name">Disease Name</Label>
+							<Label htmlFor="name">
+								Disease Name
+							</Label>
+
+							<p className="text-xs text-gray-500">
+								Please choose based on the doctor's prescription.
+							</p>
+
 							<Input
 								id="name"
 								value={formData.name}
 								onChange={(e) =>
 									setFormData((prev) => ({ ...prev, name: e.target.value }))
 								}
-							/>
-						</div>
-						<div className="space-y-2">
-							<Label htmlFor="category">Category</Label>
-							<Input
-								id="category"
-								value={formData.category}
-								onChange={(e) =>
-									setFormData((prev) => ({ ...prev, category: e.target.value }))
-								}
+								placeholder="Enter disease name"
+								className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
 							/>
 						</div>
 						<div className="space-y-2">

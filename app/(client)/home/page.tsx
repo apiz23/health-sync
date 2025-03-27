@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Card, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { IoWarningOutline, IoAlertCircleOutline } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import { Disease } from "@/interface/interface";
@@ -87,22 +87,22 @@ export default function Page() {
 			</div>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 				{/* Major Conditions */}
-				<Card className="p-6 bg-[#A6CDC6]">
+				<Card className="bg-[#FCFFE7]">
 					<CardHeader className="flex items-center gap-2 mb-4">
 						<IoWarningOutline className="text-red-600 w-6 h-6" />
 						<h2 className="text-xl font-semibold text-[#16404D]">Major Conditions</h2>
 					</CardHeader>
-					<div className="space-y-3">
+					<CardContent className="space-y-3">
 						{diseases.major.length > 0 ? (
 							diseases.major.map((disease) => (
-								<div key={disease.id} className="bg-white p-4 rounded-lg">
+								<div key={disease.id} className="bg-neutral-800 p-4 rounded-lg">
 									<div className="flex justify-between items-start">
 										<div>
-											<h3 className="font-medium text-red-900">{disease.name}</h3>
-											<p className="text-sm text-gray-600">
+											<h3 className="font-medium text-red-400">{disease.name}</h3>
+											<p className="text-sm text-gray-300">
 												Category: {disease.classification}
 											</p>
-											<p className="text-sm text-gray-600 mt-1">{disease.description}</p>
+											<p className="text-sm text-gray-300 mt-1">{disease.description}</p>
 										</div>
 									</div>
 								</div>
@@ -110,26 +110,26 @@ export default function Page() {
 						) : (
 							<p className="text-gray-600 text-center">No major conditions recorded</p>
 						)}
-					</div>
+					</CardContent>
 				</Card>
 
 				{/* Minor Conditions */}
-				<Card className="p-6 bg-[#A6CDC6]">
+				<Card className="bg-[#FCFFE7]">
 					<CardHeader className="flex items-center gap-2 mb-4">
 						<IoAlertCircleOutline className="text-yellow-600 w-6 h-6" />
 						<h2 className="text-xl font-semibold text-[#16404D]">Minor Conditions</h2>
 					</CardHeader>
-					<div className="space-y-3">
+					<CardContent className="space-y-3">
 						{diseases.minor.length > 0 ? (
 							diseases.minor.map((disease) => (
-								<div key={disease.id} className="bg-white p-4 rounded-lg">
+								<div key={disease.id} className="bg-neutral-800 p-4 rounded-lg">
 									<div className="flex justify-between items-start">
 										<div>
-											<h3 className="font-medium text-yellow-900">{disease.name}</h3>
-											<p className="text-sm text-gray-600">
+											<h3 className="font-medium text-yellow-500">{disease.name}</h3>
+											<p className="text-sm text-gray-300">
 												Category: {disease.classification}
 											</p>
-											<p className="text-sm text-gray-600 mt-1">{disease.description}</p>
+											<p className="text-sm text-gray-300 mt-1">{disease.description}</p>
 										</div>
 									</div>
 								</div>
@@ -137,7 +137,7 @@ export default function Page() {
 						) : (
 							<p className="text-gray-600 text-center">No minor conditions recorded</p>
 						)}
-					</div>
+					</CardContent>
 				</Card>
 			</div>
 

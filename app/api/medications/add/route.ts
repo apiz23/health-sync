@@ -4,11 +4,27 @@ import supabase from "@/lib/supabase";
 export async function POST(req: Request) {
 	try {
 		const body = await req.json();
-		const { userId, name, dosage, frequency, times, startDate, endDate, notes } =
-			body;
+		const {
+			userId,
+			diseaseId: disease_id,
+			name,
+			dosage,
+			frequency,
+			times,
+			startDate,
+			endDate,
+			notes,
+		} = body;
 
 		if (!userId) {
 			return NextResponse.json({ error: "User ID is required" }, { status: 400 });
+		}
+
+		if (!disease_id) {
+			return NextResponse.json(
+				{ error: "Disease ID is required" },
+				{ status: 400 }
+			);
 		}
 
 		const { data, error } = await supabase
@@ -16,6 +32,7 @@ export async function POST(req: Request) {
 			.insert([
 				{
 					user_id: userId,
+					disease_id,
 					name,
 					dosage,
 					frequency,

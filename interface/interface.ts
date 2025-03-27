@@ -2,7 +2,6 @@ export interface Disease {
 	id: string;
 	user_id: string;
 	name: string;
-	category: string;
 	classification: string;
 	description: string;
 	created_at: string;
@@ -36,5 +35,5 @@ export interface Medication {
 export interface AiAnalysis {
 	possible_disease?: string;
 	confidence_level?: string;
-	suggested_action?: string; 
+	suggested_action?: string;
 }
